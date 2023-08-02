@@ -4,46 +4,40 @@ let random = Math.trunc(Math.random() * 20);
 let score = 20;
 let highScore = 0;
 
+// DISPLAY MESSAGE FUNCTION (enter css className , message you want to display)
+let displaymsg = function (className, message) {
+  document.querySelector(`.${className}`).textContent = message;
+};
+
 //GUESS FUNCTION
 document.querySelector('.check').addEventListener('click', function () {
   const guess = Number(document.querySelector('.guess').value);
 
   //if guess is null
   if (!guess) {
-    document.querySelector('.message').textContent = 'Please enter a number';
-
-    //if guess is too high
-  } else if (guess > random) {
+    displaymsg('message', 'Please enter a number');
+  } //if guess is wrong
+  else if (guess != random) {
     if (score > 1) {
-      document.querySelector('.message').textContent = 'too high';
+      displaymsg('message', guess > random ? 'too high' : 'too low');
       score--;
-      document.querySelector('.score').textContent = score;
+      displaymsg('score', score);
     } else {
-      document.querySelector('.score').textContent = 0;
-      document.querySelector('.message').textContent = 'You Lost';
-    }
+      displaymsg('score', 0);
 
-    //if guess is too low
-  } else if (guess < random) {
-    if (score > 1) {
-      document.querySelector('.message').textContent = 'too low';
-      score--;
-      document.querySelector('.score').textContent = score;
-    } else {
-      document.querySelector('.score').textContent = 0;
-      document.querySelector('.message').textContent = 'You Lost';
+      displaymsg('message', 'you lost');
     }
+  } //if guess is correct
+  else if (guess == random) {
+    displaymsg('message', 'Congrats bruh');
+    displaymsg('number', guess);
 
-    //if guess is correct
-  } else if (guess == random) {
-    document.querySelector('.message').textContent = 'Congrats bruh';
-    document.querySelector('.number').textContent = guess;
     document.querySelector('.number').style.width = '50rem';
     document.querySelector('body').style.backgroundColor = '#60b347';
 
     if (score > highScore) {
       highScore = score;
-      document.querySelector('.highscore').textContent = highScore;
+      displaymsg('highscore', highScore);
     }
   }
 });
@@ -53,10 +47,10 @@ document.querySelector('.again').addEventListener('click', function () {
   score = 20;
   random = Math.trunc(Math.random() * 20);
 
-  document.querySelector('.score').textContent = score;
-  document.querySelector('.number').textContent = '?';
-  document.querySelector('.message').textContent = 'Start guessing ...';
+  displaymsg('score', score);
+  displaymsg('number', '?');
+  displaymsg('message', 'Start guessing ...');
   document.querySelector('.guess').value = '';
   document.querySelector('body').style.backgroundColor = '#222';
-  document.querySelector('number').style.width = '15rem';
+  document.querySelector('.number').style.width = '15rem';
 });
